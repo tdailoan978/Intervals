@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0d10">
+  <meta name="color-scheme" content="dark">
+  <title>Intervals</title>
+
+  <!-- Install as an app: full screen from the Home Screen, with its own icon -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Intervals">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+
+  <!-- Home -->
+  <main id="screen-home" class="screen home">
+    <header class="home-header">
+      <h1>Intervals</h1>
+      <button id="open-settings" class="icon-plain" aria-label="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title">Quick start</h2>
+      <div id="preset-grid" class="preset-grid"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">My workouts</h2>
+        <button id="reorder-toggle" class="link-btn" hidden>Reorder</button>
+      </div>
+      <div id="workout-list" class="card-list"></div>
+      <p id="workout-empty" class="empty" hidden>No saved workouts yet. Build one, or open a quick start and tap “Save as my workout”.</p>
+      <button id="new-workout" class="btn btn-primary new-btn">+ New workout</button>
+    </section>
+  </main>
+
+  <!-- Workout builder -->
+  <main id="screen-editor" class="screen editor" hidden>
+    <header class="editor-bar">
+      <button id="editor-cancel" class="bar-btn">Cancel</button>
+      <h1 id="editor-title" class="bar-title">New workout</h1>
+      <button id="editor-save" class="bar-btn bar-btn-primary">Save</button>
+    </header>
+    <div class="editor-body">
+      <input id="editor-name" class="name-input" type="text" placeholder="Workout name"
+             aria-label="Workout name" enterkeyhint="done" autocomplete="off">
+      <p id="editor-total" class="editor-total"></p>
+      <p id="editor-error" class="error" hidden></p>
+      <div id="editor-blocks" class="blocks"></div>
+      <div class="add-row">
+        <button id="editor-add-seg" class="btn">+ Segment</button>
+        <button id="editor-add-group" class="btn">+ Repeat group</button>
+      </div>
+      <p class="hint">A repeat group runs its segments for the number of rounds, then repeats the whole thing for each set.</p>
+      <button id="editor-delete" class="btn btn-ghost-danger" hidden>Delete workout</button>
+    </div>
+  </main>
+
+  <!-- Settings -->
+  <main id="screen-settings" class="screen editor" hidden>
+    <header class="editor-bar">
+      <button id="settings-back" class="bar-btn">‹ Back</button>
+      <h1 class="bar-title">Settings</h1>
+      <span></span>
+    </header>
+    <div id="settings-body" class="settings-body"></div>
+  </main>
+
+  <!-- Run -->
+  <section id="screen-run" class="run" hidden>
+    <header class="run-top">
+      <button id="run-end" class="icon-btn" aria-label="End workout">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="run-top-center">
+        <span id="run-title" class="run-title"></span>
+        <span id="run-paused" class="paused-pill" hidden>Paused</span>
+      </div>
+      <span class="icon-btn-spacer"></span>
+    </header>
+
+    <div class="run-main">
+      <div class="run-display">
+        <div id="run-name" class="run-name"></div>
+        <div id="run-sub" class="run-sub"></div>
+        <div class="run-time-wrap">
+          <span id="run-time" class="run-time">0:00</span><span id="run-tenths" class="run-tenths" hidden></span>
+        </div>
+        <div id="run-progress" class="run-progress"><div id="run-bar" class="run-bar"></div></div>
+      </div>
+
+      <div class="run-side">
+        <div class="run-info">
+          <div class="info-box">
+            <span class="label">Next</span>
+            <span id="run-next" class="value"></span>
+          </div>
+          <div class="info-box">
+            <span id="run-total-label" class="label">Total left</span>
+            <span id="run-total" class="value"></span>
+          </div>
+        </div>
+        <div class="run-controls">
+          <button id="run-back" class="ctrl" aria-label="Previous segment">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h2v14H7zM20 6.2v11.6a.8.8 0 0 1-1.25.66L10.5 12.66a.8.8 0 0 1 0-1.32l8.25-5.8A.8.8 0 0 1 20 6.2z"/></svg>
+          </button>
+          <button id="run-play" class="ctrl ctrl-main" aria-label="Start"></button>
+          <button id="run-skip" class="ctrl" aria-label="Next segment">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5h2v14h-2zM4 6.2v11.6a.8.8 0 0 0 1.25.66l8.25-5.8a.8.8 0 0 0 0-1.32l-8.25-5.8A.8.8 0 0 0 4 6.2z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="run-done" class="run-done" hidden>
+      <svg class="done-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      <h2>Workout complete</h2>
+      <p id="run-done-sub" class="done-sub"></p>
+      <div class="done-actions">
+        <button id="run-restart" class="btn">Restart</button>
+        <button id="run-close" class="btn btn-primary">Finish</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- End-workout confirmation -->
+  <dialog id="end-dialog" class="sheet">
+    <div class="sheet-body">
+      <h2 tabindex="-1" autofocus>End workout?</h2>
+      <p>You'll lose your place in this workout.</p>
+      <button type="button" value="end" class="btn btn-danger">End workout</button>
+      <button type="button" value="restart" class="btn">Restart from beginning</button>
+      <button type="button" value="cancel" class="btn btn-ghost">Keep going</button>
+    </div>
+  </dialog>
+
+</body>
+</html>
